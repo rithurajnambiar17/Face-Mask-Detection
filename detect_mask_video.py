@@ -12,6 +12,14 @@ import imutils
 import time
 import cv2
 import os
+from pygame import mixer
+
+def alert():
+   mixer.init()
+   alert=mixer.Sound('./beep-07.wav')
+   alert.play()
+   time.sleep(0.1)
+   alert.play()   
 
 def detect_and_predict_mask(frame, faceNet, maskNet):
 	# grab the dimensions of the frame and then construct a blob
@@ -123,6 +131,8 @@ while True:
 
 		# determine the class label and color we'll use to draw
 		# the bounding box and text
+		if withoutMask >  mask:
+			alert()
 		label = "Mask" if mask > withoutMask else "No Mask"
 		color = (0, 255, 0) if label == "Mask" else (0, 0, 255)
 			
@@ -134,6 +144,7 @@ while True:
 		cv2.putText(frame, label, (startX, startY - 10),
 			cv2.FONT_HERSHEY_SIMPLEX, 0.45, color, 2)
 		cv2.rectangle(frame, (startX, startY), (endX, endY), color, 2)
+		
 
 	# show the output frame
 	cv2.imshow("Frame", frame)
